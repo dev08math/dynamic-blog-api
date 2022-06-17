@@ -57,7 +57,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [APPS_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,17 +133,19 @@ STATICFILES_FINDER = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = ROOT_DIR / 'static'
 
 MEDIA_URL = 'mediafiles/'
 
-MEDIA_ROOT = BASE_DIR / 'media_assets'
+MEDIA_ROOT = ROOT_DIR / 'mediafiles'
 
 # Default primary key field type
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_URLS_REGEX = r"^/api/.*$"
+
+AUTH_USER_MODEL = "users.User"
 
 LOGGING = {
     "version": 1,
@@ -166,27 +168,4 @@ LOGGING = {
         "level": "INFO",
         "handlers": ["console"]
     },
-}
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format':
-            "%(levelname)s %(name)-12s %(asctime)s %(module)s "
-            "%(process)s %(thread)d %(message)s"
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
-    },
-    'root': {
-        'level': 'INFO',
-        'handlers': ['console']
-    }
 }
