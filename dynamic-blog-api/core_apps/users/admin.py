@@ -1,14 +1,12 @@
-import django
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
-from platformdirs import user_cache_dir
 from .forms import UserChangeForm, UserCreationForm
 from .models import User
-# Register your models here.
+
 
 class UserAdmin(BaseUserAdmin):
-    ordering = ["email"] # always unique
+    ordering = ["email"]  # always unique
     add_form = UserCreationForm
     form = UserChangeForm
     model = User
@@ -29,14 +27,14 @@ class UserAdmin(BaseUserAdmin):
         (
             _("Login Creds"),
             {
-                "fields":(
+                "fields": (
                     "email",
                     "password",
                 )
             },
             _("Personal Info"),
             {
-                "fields":(
+                "fields": (
                     "username",
                     "first_name",
                     "last_name",
@@ -44,7 +42,7 @@ class UserAdmin(BaseUserAdmin):
             },
             _("Permissions and Groups"),
             {
-                "fields":(
+                "fields": (
                     "is_staff",
                     "is_superuser",
                     "is_active",
@@ -55,22 +53,21 @@ class UserAdmin(BaseUserAdmin):
             },
             _("Important Dates"),
             {
-                "fields":(
+                "fields": (
                     "last_login",
                     "date_joined",
                 )
             },
-        ),
-    )
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes":("wide",),
-                "fields":("email", "password1", "password2", "is_staff", "is_active"),
-            },
-        ),
-    )
+        ), )
+    add_fieldsets = ((
+        None,
+        {
+            "classes": ("wide", ),
+            "fields":
+            ("email", "password1", "password2", "is_staff", "is_active"),
+        },
+    ), )
     search_fields = ["email", "username", "first_name", "last_name"]
+
 
 admin.site.register(User, UserAdmin)
