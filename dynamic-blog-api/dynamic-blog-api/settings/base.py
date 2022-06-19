@@ -1,4 +1,5 @@
 from pathlib import Path
+from decouple import config
 import environ
 
 env = environ.Env()  # loading environment variables
@@ -64,21 +65,32 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.template.context_preprocessors.il8n',
-                'django.template.context_preprocessors.static',
-                'django.template.context_preprocessors.tz',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
 
+# 'django.template.context_preprocessors.il8n',
+# 'django.template.context_preprocessors.static',
+# 'django.template.context_preprocessors.tz',
+
 WSGI_APPLICATION = 'dynamic-blog-api.wsgi.application'
 
 # Database
 
-DATABASES = {'default': env.db('DATABASE_URL')}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': config('DB_HOST_NAME'),
+#         'PORT': config('DB_SERVER_PORT'),
+#     }
+# }
 
+DATABASES = {'default': env.db('DATABASE_URL')}
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 
 PASSWORD_HASHERS = [

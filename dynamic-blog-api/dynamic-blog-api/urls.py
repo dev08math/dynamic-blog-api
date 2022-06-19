@@ -18,8 +18,8 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("readthedocs/", schema_view.with_ui("readthedocs", cache_timeout=0)),
-    path(settings.base.ADMIN_URL, admin.site.urls),
+    path("apidocs/", schema_view.with_ui("swagger", cache_timeout=0), name="API Documentation"),
+    path(settings.ADMIN_URL, admin.site.urls),
 ]
 
 admin.site.site_header = "Admin Panel"
