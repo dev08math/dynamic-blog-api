@@ -12,15 +12,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     #     BigAutoField is a 64-bit integer, much like an AutoField except that it is guaranteed to fit numbers from 1 to 9223372036854775807
     pkid = models.BigAutoField(primary_key=True, editable=False)
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    username = models.CharField(verbose_name=_("username"), db_index=True, max_length=255, unique=True)
+    username = models.CharField(verbose_name=_("username"),
+                                db_index=True,
+                                max_length=255,
+                                unique=True)
     first_name = models.CharField(verbose_name=_("first_name"), max_length=50)
     last_name = models.CharField(verbose_name=_("last_name"), max_length=50)
-    email = models.EmailField(verbose_name=_("last_name"),db_index=True,unique=True)
+    email = models.EmailField(verbose_name=_("last_name"),
+                              db_index=True,
+                              unique=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = "email" # will have to create a custom authentication backend that tries to look up the user on the 'email' or 'username' fields.
+    USERNAME_FIELD = "email"  # will have to create a custom authentication backend that tries to look up the user on the 'email' or 'username' fields.
     REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     objects = CustomUserManager()

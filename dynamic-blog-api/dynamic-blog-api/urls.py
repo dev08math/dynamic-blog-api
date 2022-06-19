@@ -18,7 +18,9 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("apidocs/", schema_view.with_ui("swagger", cache_timeout=0), name="API Documentation"),
+    path("apidocs/",
+         schema_view.with_ui("swagger", cache_timeout=0),
+         name="API Documentation"),
     path(settings.ADMIN_URL, admin.site.urls),
 ]
 

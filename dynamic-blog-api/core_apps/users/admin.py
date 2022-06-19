@@ -24,7 +24,8 @@ class UserAdmin(BaseUserAdmin):
     list_display_links = ["id", "email"]
     list_filter = ["email", "username"]
     fieldsets = (
-        (_("Login Creds"),
+        (
+            _("Login Creds"),
             {
                 "fields": (
                     "email",
@@ -32,7 +33,8 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
-        ( _("Personal Info"),
+        (
+            _("Personal Info"),
             {
                 "fields": (
                     "username",
@@ -41,7 +43,8 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
-        ( _("Permissions and Groups"),
+        (
+            _("Permissions and Groups"),
             {
                 "fields": (
                     "is_staff",
@@ -53,25 +56,26 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
-        ( _("Important Dates"),
+        (
+            _("Important Dates"),
             {
                 "fields": (
                     "last_login",
                     "date_joined",
                 )
             },
-        ), 
-        )
+        ),
+    )
 
-    add_fieldsets = (
-        ( None,
-            {
-                "classes": ("wide", ),
-                "fields": ("email", "password1", "password2", "is_staff", "is_active"),
-            },
-        ), 
-        )
-        
+    add_fieldsets = ((
+        None,
+        {
+            "classes": ("wide", ),
+            "fields":
+            ("email", "password1", "password2", "is_staff", "is_active"),
+        },
+    ), )
+
     search_fields = ["email", "username", "first_name", "last_name"]
 
 
