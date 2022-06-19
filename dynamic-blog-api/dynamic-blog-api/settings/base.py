@@ -1,5 +1,4 @@
 from pathlib import Path
-from decouple import config
 import environ
 
 env = environ.Env()  # loading environment variables
@@ -71,24 +70,7 @@ TEMPLATES = [
     },
 ]
 
-# 'django.template.context_preprocessors.il8n',
-# 'django.template.context_preprocessors.static',
-# 'django.template.context_preprocessors.tz',
-
 WSGI_APPLICATION = 'dynamic-blog-api.wsgi.application'
-
-# Database
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config('DB_NAME'),
-#         'USER': config('DB_USER'),
-#         'PASSWORD': config('DB_PASSWORD'),
-#         'HOST': config('DB_HOST_NAME'),
-#         'PORT': config('DB_SERVER_PORT'),
-#     }
-# }
 
 DATABASES = {'default': env.db('DATABASE_URL')}
 DATABASES['default']['ATOMIC_REQUESTS'] = True
@@ -137,7 +119,7 @@ ADMIN_URL = env.str('ADMIN_URL', default='admin/')
 
 # Static files (CSS, JavaScript, Images)
 
-STATIC_URL = 'static/'
+STATIC_URL = 'staticfiles/'
 
 STATIC_FILES_DIRS = []
 
@@ -145,7 +127,8 @@ STATICFILES_FINDER = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-STATIC_ROOT = ROOT_DIR / 'static'
+
+STATIC_ROOT = ROOT_DIR / 'staticfiles'
 
 MEDIA_URL = 'mediafiles/'
 
