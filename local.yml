@@ -19,9 +19,9 @@ services:
         depends_on:
             - postgres
             - mailhog
+            - redis
         networks:
             - dynamic-blog-network
-
 
     postgres:
         build:
@@ -57,6 +57,49 @@ services:
             - media_volume:/app/mediafiles
         ports:
             - "8080:80"
+        networks:
+            - dynamic-blog-network
+
+    redis:
+        image: redis:6-alpine
+        container_name: redis
+        networks:
+            - dynamic-blog-network
+    
+    celery_worker:
+        build:
+            context: .
+            dockerfile: ./docker/local/django/Dockerfile
+        command: '/start-celeryworker'
+        container_name: celeryworker
+        volumes:
+            - .:/app
+        env_file:
+            - ./.envs/.local/.django
+            - ./.envs/.local/.postgres
+        depends_on:
+            - redis
+            - postgres
+            - mailhog
+        networks:
+            - dynamic-blog-network
+    
+    flower:
+        build:
+            context: .
+            dockerfile: ./docker/local/django/Dockerfile
+        command: '/start-flower'
+        container_name: flower
+        volumes:
+            - .:/app
+        env_file:
+            - ./.envs/.local/.django
+            - ./.envs/.local/.postgres
+        depends_on:
+            - redis
+            - postgres
+        ports:
+            - "5555:5555"
         networks:
             - dynamic-blog-network
 

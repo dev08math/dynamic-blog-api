@@ -36,6 +36,7 @@ THIRD_PARTY_APPS = [
     'drf_yasg',
     'corsheaders',
     'phonenumber_field',
+    'djcelery_email'
 ]
 
 LOCAL_APPS = ['core_apps.profiles', 'core_apps.common', 'core_apps.users']
@@ -164,3 +165,15 @@ LOGGING = {
         "handlers": ["console"]
     },
 }
+
+CELERY_BROKER_URL = env('CELERY_BROKER')
+
+CELERY_RESULT_BACKEND = env('CELERY_BACKEND')
+
+CELERY_TIMEZONE = 'UTC'
+
+CELERY_ACCEPT_CONTENT = ['json', 'pickle']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_SERIALIZER = 'json'

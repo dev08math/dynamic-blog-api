@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+watchmedo auto-restart -d dynamic-blog-api/dynamic-blog-api/ -p '*.py' -- celery -A celery worker --loglevel=info
