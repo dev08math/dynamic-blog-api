@@ -115,7 +115,7 @@ USE_TZ = True
 
 SITE_ID = 1
 
-ADMIN_URL = env.str('ADMIN_URL', default='admin/')
+ADMIN_URL = 'admin/'
 
 # Static files (CSS, JavaScript, Images)
 
