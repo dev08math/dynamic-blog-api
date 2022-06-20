@@ -1,1 +1,0 @@
-{"buildTargets":["black","black-check","black-diff","build","collectstatic","down","down-v","flake8","isort","isort-check","isort-diff","makemigrations","migrate","postgres_volume","show_logs","superuser","up"],"launchTargets":[],"customConfigurationProvider":{"workspaceBrowse":{"browsePath":[],"compilerArgs":[]},"fileIndex":[]}}
