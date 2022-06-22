@@ -143,6 +143,10 @@ CORS_URLS_REGEX = r"^/api/.*$"
 
 AUTH_USER_MODEL = "users.User"
 
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER" : "core.apps.common.exceptions.custom_exception_handler",
+    "NON_FIELD_ERRORS_KEY" : "error",
+}
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
