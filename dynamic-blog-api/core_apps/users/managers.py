@@ -72,7 +72,8 @@ class CustomUserManager(BaseUserManager):
                                 first_name=first_name,
                                 last_name=last_name,
                                 email=email,
+                                password=password,
                                 **extra_info)
 
-        user.save(using=self._db)  # I think this is unecessary
+        # user.save(using=self._db)  # I think this is unecessary
         return user
