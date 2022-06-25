@@ -20,20 +20,24 @@ class Profiles(TimeStampedUUIDModel):
         verbose_name=_("About me"), default=_("Say something about yourself...")
     )
     gender = models.CharField(
-        verbose_name=_("Gender"), choices=Gender.choices, default=Gender.NA
+        verbose_name=_("Gender"), choices=Gender.choices, default=Gender.NA, max_length=10
     )
     phonenumber = PhoneNumberField(
         verbose_name=_("Phonenumber"), max_length=13, default="+919999999999"
     )
     country = CountryField(verbose_name=_("Country"), default="IN")
     city = models.CharField(verbose_name=_("City"), max_length=100)
-    profile_pic = models.ImageField(default="", upload_to="")  # have to fix this
+    profile_pic = models.ImageField(verbose_name=_('DP'), default="")  # have to fix this
     twitter_handle = models.CharField(
         verbose_name=_("Twitter Handle"), max_length=20, blank=True
     )
     follows = models.ManyToManyField(
         "self", related_name="followed_by", blank=True, symmetrical=False
     )  # followers will follow the person they want but the one who they are following doesn't necessarily need to follow them back that's why symmetrical = False
+
+    class Meta:
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
 
     def __str__(self) -> str:
         return f"{self.user.username}'s profile"
