@@ -20,6 +20,7 @@ class UserAdmin(BaseUserAdmin):
         #extra_info
         "is_staff",
         "is_active",
+        'is_superuser'
     ]
     list_display_links = ["id", "email"]
     list_filter = ["email", "username"]
@@ -50,7 +51,8 @@ class UserAdmin(BaseUserAdmin):
                     "is_staff",
                     "is_superuser",
                     "is_active",
-                    #have to figure these out
+
+                    #Under DjangoModelPermissions
                     "user_permissions",
                     "groups",
                 )
@@ -67,6 +69,8 @@ class UserAdmin(BaseUserAdmin):
         ),
     )
 
+    # add_fieldsets is not a standard ModelAdmin attribute. 
+    # 'UserAdmin' overrides the 'get_fieldsets()' to use this attribute when creating a user
     add_fieldsets = ((
         None,
         {

@@ -1,3 +1,4 @@
+from pyexpat import model
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -18,11 +19,12 @@ class User(AbstractBaseUser, PermissionsMixin):
                                 unique=True)
     first_name = models.CharField(verbose_name=_("first_name"), max_length=50)
     last_name = models.CharField(verbose_name=_("last_name"), max_length=50)
-    email = models.EmailField(verbose_name=_("last_name"),
+    email = models.EmailField(verbose_name=_("email"),
                               db_index=True,
                               unique=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"  # will have to create a custom authentication backend that tries to look up the user on the 'email' or 'username' fields.
