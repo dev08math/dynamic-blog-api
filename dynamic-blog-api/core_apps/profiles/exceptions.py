@@ -3,7 +3,7 @@ from rest_framework.exceptions import APIException
 
 class NotYourProfile(APIException):
     status_code = 403 # forbidden error for unauthorized viewing of someone else's profile
-    default_detail = "You can't view this profile without proper authorization"
+    default_detail = "You can't edit or view this profile without proper authorization"
 
 class CantFollowSelf(APIException):
     status_code = 403

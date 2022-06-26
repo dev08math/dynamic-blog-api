@@ -12,7 +12,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email")
 
     # testing : using full_name getter method from user models
-    fullname = serializers.CharField(source="user.full_name")
+    fullname = serializers.SerializerMethodField(read_only=True)
 
     profile_dp = serializers.SerializerMethodField()
     following = serializers.SerializerMethodField()
@@ -47,10 +47,15 @@ class ProfileSerializer(serializers.ModelSerializer):
             return False
 
         # using the 'related_name=profile' in Profiles to access the corresponding obj by the user obj
-        current_user_profile = request.user.profile
-        followee = instance    # custom queryset of having only 'follows' attribute passed as input when ProfileSerializer is called
+        current_user_profile = request.user.profile   # accessing current user's profile using request
+        followee = instance    # custom queryset of having profile obj(s) in consideration passed as input when ProfileSerializer is called
         following_status = current_user_profile.check_following(followee)
         return following_status
+    
+    def get_fullname(self, obj):
+        first_name = obj.user.first_name.title()
+        last_name = obj.user.last_name.title()
+        return f"{first_name} {last_name}"
 
 class UpdateProfileSerializer(serializers.ModelSerializer):   # POST request
     country = CountryField(name_only=True)
@@ -58,7 +63,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):   # POST request
     class Meta:
         model = Profiles
         fields = [
-            "phone_number",
+            "phonenumber",
             "profile_pic",
             "about_me",
             "gender",
@@ -68,6 +73,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):   # POST request
         ]
 
 class FollowingSerializer(serializers.ModelSerializer):  # have to figure this out
+
     username = serializers.CharField(source="user.username", read_only=True)
     first_name = serializers.CharField(source="user.first_name", read_only=True)
     last_name = serializers.CharField(source="user.last_name", read_only=True)
