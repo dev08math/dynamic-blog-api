@@ -146,7 +146,7 @@ CORS_URLS_REGEX = r"^/api/.*$"
 AUTH_USER_MODEL = "users.User"
 
 REST_FRAMEWORK = {
-    "EXCEPTION_HANDLER" : "core.apps.common.exceptions.custom_exception_handler",
+    "EXCEPTION_HANDLER" : "core_apps.common.exceptions.custom_exception_handler",
     "NON_FIELD_ERRORS_KEY" : "error",
     "DEFAULT_AUTHENTICATION_CLASSES":(
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -171,12 +171,12 @@ DJOSER = {
     # has to do nothing with 'generation' of tokens. Its all about the user management and authentication
     # uses jwt in its backend for generation of tokens, can also user normal token base authentication
     # proper endpoints for managing user registration, management and authenticatiion is given in the docs
-    
+
     'LOGIN_FIELD' : 'email',
     'USER_CREATE_PASSWORD_RETYPE' : True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION' : True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION' : True,
-    'SEND_CONFIRMATION_EMAIL' : True,
+    # 'SEND_CONFIRMATION_EMAIL' : True,
 
     # URL are used for frontend and given to it.
     # the 'uid' and 'token' for example are the input to given in JSON format in the request.
@@ -186,8 +186,8 @@ DJOSER = {
     'SET_PASSWORD_RETYPE' : True,    # functionality for asking the user to retype the resetted/new password
     'PASSWORD_RESET_CONFRIM_RETYPE' : True, # functionality for asking the user to confirm to the new resetted password
     'USERNAME_RESET_CONFIRM_URL' : 'email/reset/confrim/{uid}/{token}',
-    'ACTIVATION_URL' : 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL' : True,
+    # 'ACTIVATION_URL' : 'activate/{uid}/{token}',
+    # 'SEND_ACTIVATION_EMAIL' : True,
 
     # for knowing more about the keys of the 'SERIALIZERS' refer the docs
     'SERIALIZERS' : {  
