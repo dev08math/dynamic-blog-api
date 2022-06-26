@@ -14,7 +14,8 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(self, username, first_name, last_name, email, password=None,
                     **extra_info):
-
+        
+        # the errors below will only be raised in frontend or in python shell
         if not username:
             raise ValueError(_("Please Provide a username"))
 
@@ -75,5 +76,4 @@ class CustomUserManager(BaseUserManager):
                                 password=password,
                                 **extra_info)
 
-        # user.save(using=self._db)  # I think this is unecessary
         return user
