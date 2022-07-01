@@ -17,7 +17,7 @@ def find_article_obj(slug):
     return article
 
 class ReactionAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = ReactionSerializer
 
     def set_reaction(self, user, article, reaction):
