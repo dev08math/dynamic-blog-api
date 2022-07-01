@@ -25,6 +25,10 @@ urlpatterns = [
     path('api/v1/auth/', include('djoser.urls')),
     path('api/v1/auth/', include('djoser.urls.jwt')),
     path("api/v1/profiles/", include("core_apps.profiles.urls")),
+    path("api/v1/reactons/", include("core_apps.reactions.urls")),
+    path("api/v1/comments/", include("core_apps.commments.urls")),
+    path("api/v1/ratings/", include("core_apps.ratings.urls")),
+    path("api/v1/articles/", include("core_apps.articles.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Admin Panel"
