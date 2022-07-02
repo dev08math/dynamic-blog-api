@@ -1,10 +1,4 @@
-from audioop import avg
-from re import L
-from sqlite3.dbapi2 import _AnyParamWindowAggregateClass
-from tabnanny import verbose
-from time import time
 from django.db import models
-from django.test import tag
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Avg
 from django.contrib.auth import get_user_model
@@ -37,6 +31,8 @@ class Article(TimeStampedUUIDModel):
 
     title = models.CharField(verbose_name=_("Title"), max_length=50)
 
+    slug = AutoSlugField(populate_from="title", always_update=True, unique=True)
+    
     description = models.CharField(verbose_name=_("Description"), max_length=150)
 
     body = models.TextField(verbose_name=_("Content"))
@@ -57,7 +53,8 @@ class Article(TimeStampedUUIDModel):
     def article_read_time(self):
         time_to_read = ArticleReadEngine(self)   # self is the current article obj
         return time_to_read
-    
+        
+    @property
     def get_average_rating(self):
         if Rating.objects.all() > 0:
             rating = Rating.objects.filter(article=self.pkid).all().aggregate(Avg("value")) # rating will now be a single obj
