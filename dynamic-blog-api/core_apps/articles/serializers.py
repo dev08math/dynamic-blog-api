@@ -62,9 +62,9 @@ class ArticleSerializer(serializers.ModelSerializer):
             "twitter_handle": obj.author.profile.twitter_handle,
         }
     
-    # have to optimize
+
     def get_ratings(self, obj):
-        reviews = obj.article_ratings.all()
+        reviews = obj.article_ratings.all()   # getting all the article ratings pertaining to an article
         serializer = RatingSerializers(reviews, many=True)
         return serializer.data
 
@@ -72,7 +72,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         num_reviews = obj.article_ratings.all().count()
         return num_reviews
 
-    # have to optimize
+
     def get_comments(self, obj):
         comments = obj.comments.all()
         serializer = CommentSectionSerializer(comments, many=True)
@@ -105,3 +105,40 @@ class ArticleSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+class ArticleCreateSerializers(serializers.ModelSerializer):
+    tag = TagRelatedField()
+    # banner_image = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Article
+        exclude = ["updated_at", "pkid"]
+
+    def get_created_at(self, obj):
+        now = obj.created_at
+        formatted_date = now.strftime("%m/%d/%Y, %H:%M:%S")
+        return formatted_date
+
+    # def get_banner_image(self, obj):
+    #     return obj.banner_image.url
+
+class ArticleUpdateSerializer(serializers.ModelSerializer):
+    tags = TagRelatedField(many=True, required=False)
+    updated_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Article
+        fields = [
+                  "title", 
+                  "description",
+                  "body",
+                  "banner_image",
+                  "tags", 
+                  "updated_at"
+                  ]
+
+    def get_updated_at(self, obj):
+        then = obj.updated_at
+        formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
+        return formatted_date
