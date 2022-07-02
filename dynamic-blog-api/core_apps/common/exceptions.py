@@ -1,7 +1,5 @@
-from asyncio.base_subprocess import ReadSubprocessPipeProto
-from cgitb import handler
-from logging import handlers
-from urllib import response
+
+
 from rest_framework.views import exception_handler
 
 def custom_exception_handler(exc, context):
@@ -10,7 +8,7 @@ def custom_exception_handler(exc, context):
 
     def _handle_generic_error(exc, context, response):
         status_code = response.status_code        # customising the status code
-        response.data = {"statuc_code" : status_code, "error" : response.data}   # custom response
+        response.data = {"status_code" : status_code, "error" : response.data}   # custom response
         return response
 
     def _handle_not_found_error(exc, context, response):
