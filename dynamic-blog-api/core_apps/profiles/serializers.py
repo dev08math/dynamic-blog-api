@@ -72,7 +72,7 @@ class UpdateProfileSerializer(serializers.ModelSerializer):   # POST request
             "twitter_handle",
         ]
 
-class FollowingSerializer(serializers.ModelSerializer):  # have to figure this out
+class FollowingSerializer(serializers.ModelSerializer): 
 
     username = serializers.CharField(source="user.username", read_only=True)
     first_name = serializers.CharField(source="user.first_name", read_only=True)
