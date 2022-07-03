@@ -8,7 +8,7 @@ class RatingSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Rating
-        fields = ['id', 'article', 'rated_by', 'value']
+        fields = ['id', 'article', 'rated_by', 'value', 'review']
 
     # remember, the obj passed in a Modelserializer class' getter or setter methods is the model obj itself 
     def get_rated_by(self, obj):   

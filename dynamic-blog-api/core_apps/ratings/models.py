@@ -2,9 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-
-from common.models import TimeStampedUUIDModel
-from articles.models import Article
+from core_apps.common.models import TimeStampedUUIDModel
 
 User = get_user_model()
 
@@ -17,7 +15,7 @@ class Rating(TimeStampedUUIDModel):
         RATING_5 = 5, _("Excellent")
     # Now if I want to use a DS like 'Range' I can just like directly import this class instead of wrting a new one
 
-    article = models.ForeignKey(Article, related_name="article", on_delete=models.CASCADE)
+    article = models.ForeignKey(to="articles.Article", related_name="article_ratings", on_delete=models.CASCADE)
 
     critic = models.ForeignKey(User, related_name="user_who_rated", on_delete=models.CASCADE)
 
@@ -26,8 +24,8 @@ class Rating(TimeStampedUUIDModel):
     review = models.TextField(verbose_name=_("Review"), blank = True)
 
     class Meta:
-        verbose_plural = "Ratings"
-        unique_together = ["rated_by", "article"]  # have to figure this one out
+        verbose_name_plural = "Ratings"
+        unique_together = ["critic", "article"]  # have to figure this one out
     
     def __str__(self):
         return f"{self.article.title} is rated at {self.value}"

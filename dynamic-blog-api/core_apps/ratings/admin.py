@@ -4,7 +4,7 @@ from .models import Rating
 
 
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ["article", "rated_by", "value"]
+    list_display = ["article", "critic", "value"]
 
 
 admin.site.register(Rating, RatingAdmin)
