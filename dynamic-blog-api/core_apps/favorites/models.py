@@ -1,3 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
-# Create your models here.
+from core_apps.articles.models import Article
+from core_apps.common.models import TimeStampedUUIDModel
