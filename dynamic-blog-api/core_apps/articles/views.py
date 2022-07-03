@@ -16,7 +16,7 @@ from .filters import ArticleFilter
 from .pagination import ArticlePagination
 from .permissions import IsOwnerOrReadOnly
 from .serializers import (
-    ArticleCreateSerializer,
+    ArticleCreateSerializers,
     ArticleSerializer,
     ArticleUpdateSerializer,
 )
@@ -34,8 +34,23 @@ class ArticleListAPIView(generics.ListAPIView):
     filterset_class = ArticleFilter
     ordering_fields = ["created_at", "username"]
 
+class ArticleCreateAPIView(generics.CreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = ArticleCreateSerializers
+
+    def create(self, request):
+        user = request.user
+        data = request.data
+        data["author"] = user.pkid
+        serializer = self.serializer_class(data=data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        logger.info(
+            f"article {serializer.data.get('title')} created by {user.username}"
+        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 class ArticleDetailView(APIView):
-    # renderer_classes = [ArticleJSONRenderer]
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, slug):
@@ -57,7 +72,7 @@ class ArticleDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(["PATCH"])
-@permission_classes(permissions.IsAuthenticated,)
+@permission_classes([permissions.IsAuthenticated])
 def update_article_api_view(request, slug):
     try:
         article = Article.objects.get(slug=slug)
@@ -65,15 +80,16 @@ def update_article_api_view(request, slug):
         raise NotFound("Cannot find any article as requested.")
 
     user = request.user
-    if article.author != user:
+    if article.author.username != user.username:
         raise UpdateArticle
 
-    if request.method == "PATCH":
-        data = request.data
-        serializer = ArticleUpdateSerializer(article, data=data, paritial = True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    
+    data = request.data
+    serializer = ArticleUpdateSerializer(instance=article, data=data, partial= True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class ArticleDeleteAPIView(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]

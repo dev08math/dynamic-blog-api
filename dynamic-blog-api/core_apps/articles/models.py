@@ -17,11 +17,11 @@ def upload_to(instance, filename):
     return 'banner_images/{filename}'.format(filename=filename)
 
 class Tag(TimeStampedUUIDModel):
-    tag = models.CharField(max_length=20)
-    slug = models.SlugField(db_index=True, unique=True)
+    tag = models.CharField(max_length=20, blank=True)
+    slug = AutoSlugField(populate_from="tag", db_index=True, unique=True)
 
     class Meta:
-        verbose_plural = "Tags"
+        verbose_name_plural = "Tags"
     
     def __str__(self):
         return self.tag
@@ -37,9 +37,9 @@ class Article(TimeStampedUUIDModel):
 
     body = models.TextField(verbose_name=_("Content"))
 
-    banner_image = models.ImageField(verbose_name=_("Banner"), default="/banner_default.png", upload_to = upload_to)
+    banner_image = models.ImageField(verbose_name=_("Banner"), default="/banner_default.jpg", upload_to = upload_to)
 
-    tags = models.ManyToManyField(Tag, related_name="articles")
+    tags = models.ManyToManyField(Tag, related_name="articles", blank=True)
 
     views = models.IntegerField(verbose_name=_("Article's views"), default=0)
 
@@ -52,12 +52,13 @@ class Article(TimeStampedUUIDModel):
     
     def article_read_time(self):
         time_to_read = ArticleReadEngine(self)   # self is the current article obj
-        return time_to_read
+        return time_to_read.get_read_time()
         
     @property
     def get_average_rating(self):
         if Rating.objects.all() > 0:
             rating = Rating.objects.filter(article=self.pkid).all().aggregate(Avg("value")) # rating will now be a single obj
+            print("\n\n\n\n\n\n\n\n",rating, "\n\n\n\n\n")
             return round(rating['value__avg'],1) if rating['value__avg'] else 0
         return 0
 

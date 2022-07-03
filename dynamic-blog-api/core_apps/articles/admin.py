@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from . import models
+from .models import Tag, Article, ArticleViews
 
 
 class ArticleAdmin(admin.ModelAdmin):
@@ -8,4 +8,8 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display_links = ["pkid", "author"]
 
 
-admin.site.register(models.Article, ArticleAdmin)
+admin.site.register(Article, ArticleAdmin)
+
+admin.site.register(Tag)
+
+admin.site.register(ArticleViews)

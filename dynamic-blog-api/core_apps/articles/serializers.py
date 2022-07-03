@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models import Avg
 
 from core_apps.articles.models import Article, ArticleViews
 from core_apps.comments.serializers import CommentSectionSerializer
@@ -15,15 +16,13 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     author_info = serializers.SerializerMethodField(read_only=True)
 
-    # banner_image = serializers.SerializerMethodField()
-
-    read_time = serializers.ReadOnlyField(source="article_read_time") # have to check
+    read_time = serializers.ReadOnlyField(source="article_read_time") 
 
     ratings = serializers.SerializerMethodField()
 
     num_ratings = serializers.SerializerMethodField()
 
-    average_rating = serializers.ReadOnlyField(source="average_rating") # have to check
+    average_rating = serializers.SerializerMethodField()
 
     likes = serializers.ReadOnlyField(source="article_reactions.likes") # article is used as a foreign key in 'article_reactions' table ( reactions model)
 
@@ -39,23 +38,26 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     updated_at = serializers.SerializerMethodField()
 
-    # def get_banner_image(self, obj):
-    #     return obj.banner_image.url
-
+    def get_average_rating(self, obj):
+        if len(obj.article_ratings.all()):   # accessing ratings model using related_name 
+            rating = obj.article_ratings.all().aggregate(Avg("value")) # rating will now be a single obj having value attribute
+            return round(rating['value__avg'],1) if rating['value__avg'] else 0
+        return 0
+        
     def get_created_at(self, obj):
-        now = obj.created_at
+        now = obj.createdAt
         formatted_date = now.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
 
     def get_updated_at(self, obj):
-        then = obj.updated_at
+        then = obj.updatedAt
         formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
     
     def get_author_info(self, obj):
         return {
             "username": obj.author.username,
-            "fullname": obj.author.full_name, # have to check
+            "fullname": obj.author.get_full_name, # can only access direct fields or class methods. Cannot invoke getter functions
             "about_me": obj.author.profile.about_me,
             "profile_pic": obj.author.profile.profile_pic.url,
             "email": obj.author.email,
@@ -107,21 +109,17 @@ class ArticleSerializer(serializers.ModelSerializer):
         ]
 
 class ArticleCreateSerializers(serializers.ModelSerializer):
-    tag = TagRelatedField()
-    # banner_image = serializers.SerializerMethodField()
+    tags = TagRelatedField(many=True, required=False)
     created_at = serializers.SerializerMethodField()
 
     class Meta:
         model = Article
-        exclude = ["updated_at", "pkid"]
+        exclude = ["updatedAt", "pkid", "createdAt"]
 
     def get_created_at(self, obj):
-        now = obj.created_at
+        now = obj.createdAt
         formatted_date = now.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date
-
-    # def get_banner_image(self, obj):
-    #     return obj.banner_image.url
 
 class ArticleUpdateSerializer(serializers.ModelSerializer):
     tags = TagRelatedField(many=True, required=False)
@@ -135,10 +133,10 @@ class ArticleUpdateSerializer(serializers.ModelSerializer):
                   "body",
                   "banner_image",
                   "tags", 
-                  "updated_at"
+                  "updated_at",
                   ]
 
     def get_updated_at(self, obj):
-        then = obj.updated_at
+        then = obj.updatedAt
         formatted_date = then.strftime("%m/%d/%Y, %H:%M:%S")
         return formatted_date

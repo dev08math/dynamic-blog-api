@@ -13,7 +13,7 @@ class ArticleReadEngine:
 
     def get_tags(self):
         tag_list = []
-        tag_list.extend([tag_word.split() for tag_word in self.article.list_of_tags ])
+        tag_list.extend([tag_word.split() for tag_word in self.article.list_of_tags() ])
         return tag_list
     
     # generating a list having all the words in respective attributes as shown below
@@ -33,8 +33,8 @@ class ArticleReadEngine:
 
         if word_length:
             time_to_read = word_length / self.wpm
-            if time_to_read < 1: read_time += str(round(time_to_read + self.banner_adjustment_time)*60) + "second(s)"
-            else : read_time += str(round(time_to_read + self.banner_adjustment_time,2)) + "minute(s)"
+            if time_to_read < 1: read_time += str(round((time_to_read + self.banner_adjustment_time)*60)) + " second(s)"
+            else : read_time += str(round(time_to_read + self.banner_adjustment_time,2)) + " minute(s)"
         return  read_time
 
     

@@ -3,9 +3,9 @@ from django.urls import path
 from .views import (
     ArticleCreateAPIView,
     ArticleDeleteAPIView,
-    ArticleDetailView,
     ArticleListAPIView,
-    update_article_api_view,
+    ArticleDetailView,
+    update_article_api_view
 )
 
 urlpatterns = [
