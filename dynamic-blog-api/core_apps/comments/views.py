@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import COMMENT
 from rest_framework import permissions, status, generics
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
@@ -6,21 +7,22 @@ from core_apps.articles.models import Article
 
 from .models import Comment
 from .serializers import CommentSectionSerializer, CommentSerializer
+from .exceptions import TamperComment
 
 # using generics.GenericAPIViewto handle API request methods
 class CommentAPIView(generics.GenericAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = ([permissions.IsAuthenticated])
     serializer_class = CommentSerializer
-
-    def get(self, request, **kwargs): # *kwargs will include all the request parameters, if any
+   
+    def get(self, request, **kwargs): 
         try:
-            slug = request.kwargs['slug']
+            slug = self.kwargs['slug']
             article = Article.objects.get(slug=slug)
         except:
             raise NotFound("No such requested article exists")
         
         try:
-            comment_check = Comment.objects.get(article_id = article.pkid)
+            comment_check = Comment.objects.filter(article__pkid = article.pkid) # accessing article pkids to compare it with the current slus's pkid
         except:
             raise NotFound("No commments found")
         
@@ -38,15 +40,22 @@ class CommentAPIView(generics.GenericAPIView):
         except Article.DoesNotExist:
             raise NotFound("No such requested article exists")
         
-        # testing
-        data = request.data
-        serializer = self.serializer_class(data=data)  
-        if serializer.is_valid():
-            serializer.save()
+        print(request.data)
+        
+        data = dict()
+        comment = request.data["body"]
+        commentor = request.user
+        obj = Comment.objects.create(article=article, body=comment, commentor=commentor)
 
-        response = {"message": "Comment successfully added"}
+        data["id"] = obj.pkid
+        data["username"] = obj.commentor.username
+        data["commented on"] = obj.article.title
+        data["comment"] = obj.body
+        data["commented at"] = obj.createdAt.strftime("%m/%d/%Y, %H:%M:%S")
+        
+        response = {"message": "Comment successfully added", "data" : data}
         status_code = status.HTTP_201_CREATED
-        return response, status_code
+        return Response(response, status_code)
 
 class CommentUpdateDeleteAPIView(generics.GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -58,12 +67,16 @@ class CommentUpdateDeleteAPIView(generics.GenericAPIView):
         except Comment.DoesNotExist:
             raise NotFound("Comment does not exist")
 
+        user = request.user
+        if comment_to_update.commentor.username != user.username:
+            raise TamperComment
+
         data = request.data
         serializer = self.serializer_class(comment_to_update, data=data, partial=True)
 
-        # testing how the validity error is raised using this 
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         response = {
             "message": "Comment updated successfully",
             "comment": serializer.data,
@@ -72,9 +85,13 @@ class CommentUpdateDeleteAPIView(generics.GenericAPIView):
     
     def delete(self, request, slug, id):
         try:
-            comment_to_delete = Comment.objects.get(id=id)
+            comment_to_delete = Comment.objects.get(id=id)  # id is the UUID not the pkid
         except Comment.DoesNotExist:
             raise NotFound("Comment does not exist")
+
+        user = request.user
+        if comment_to_delete.commentor.username != user.username:
+            raise TamperComment
 
         comment_to_delete.delete()
         response = {"message": "Comment deleted successfully"}
