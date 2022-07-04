@@ -1,6 +1,5 @@
 # using api_view decorators for handling  API requests
 
-import re
 from rest_framework import permissions, status
 from rest_framework.decorators import api_view, permission_classes  # rest_framwork.decorators doesn't have a decorator for serializer_class
 from rest_framework.response import Response
