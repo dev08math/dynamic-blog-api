@@ -22,8 +22,8 @@ class FavoritesView(generics.CreateAPIView):
         if favorite:
             raise AlreadyInFavorites
         else:
-            data["article"] = article.id  # article.id has to be in the request body
-            data["user"] = user.id
+            data["article"] = article.pkid  
+            data["user"] = user.pkid
             serializer = self.get_serializer(data=data) # accesses the serializer_class
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -36,7 +36,7 @@ class ListUserFavoriteArticles(APIView):
     def get(self, request):
         favtorites = Favorite.objects.filter(user=request.user)  # testing
 
-        favorite_articles = [ ArticleSerializer(f.article) for f in favtorites]
+        favorite_articles = [ ArticleSerializer(f.article).data["title"] for f in favtorites]
 
         my_favorites = { "my_favorites" : favorite_articles}
 

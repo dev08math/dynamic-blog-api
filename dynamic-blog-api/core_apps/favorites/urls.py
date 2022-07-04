@@ -5,8 +5,8 @@ from . import views
 urlpatterns = [
     path(
         "my_favorites/",
-        views.ListUserFavoriteArticlesAPIView.as_view(),
+        views.ListUserFavoriteArticles.as_view(),
         name="my-favorites",
     ),
-    path("<slug:slug>/", views.FavoriteAPIView.as_view(), name="favorite-article"),
+    path("<slug:slug>/", views.FavoritesView.as_view(), name="favorite-article"),
 ]
