@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/v1/ratings/", include("core_apps.ratings.urls")),
     path("api/v1/articles/", include("core_apps.articles.urls")),
     path("api/v1/favorites/", include("core_apps.favorites.urls")),
+    path("api/v1/haystack/", include("core_apps.search.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Admin Panel"
