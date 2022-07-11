@@ -39,23 +39,24 @@ COPY --from=python-build-stage /usr/src/app/wheels /wheels/
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
     && rm -rf /wheels/
 
-COPY ./docker/local/django/entrypoint /entrypoint
-RUN sed -i 's/\r$//g' /entrypoint
-RUN chmod +x /entrypoint
-
-COPY ./docker/local/django/start /start
-RUN sed -i 's/\r$//g' /start
-RUN chmod +x /start
-
-COPY ./docker/local/django/celery/worker/start-celeryworker /start-celeryworker
-RUN sed -i 's/\r$//g' /start-celeryworker
-RUN chmod +x /start-celeryworker
-
-COPY ./docker/local/django/celery/flower/start-flower /start-flower
-RUN sed -i 's/\r$//g' /start-flower
-RUN chmod +x /start-flower
 
 COPY ./dynamic-blog-api ${APP_HOME}
 
-ENTRYPOINT ["/entrypoint"]
+ADD ./docker/local/django/entrypoint ./entrypoint
+RUN sed -i 's/\r$//g' ./entrypoint
+RUN chmod +x ./entrypoint
+
+ADD ./docker/local/django/start ./start
+RUN sed -i 's/\r$//g' ./start
+RUN chmod +x ./start
+
+ADD ./docker/local/django/celery/worker/start-celeryworker ./start-celeryworker
+RUN sed -i 's/\r$//g' ./start-celeryworker
+RUN chmod +x ./start-celeryworker
+
+ADD ./docker/local/django/celery/flower/start-flower ./start-flower
+RUN sed -i 's/\r$//g' ./start-flower
+RUN chmod +x ./start-flower
+
+ENTRYPOINT ["./entrypoint"]
 
