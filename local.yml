@@ -46,8 +46,8 @@ services:
 
     nginx:
         build:
-            context: ./docker/local/nginx
-            dockerfile: Dockerfile
+            context: .
+            dockerfile: ./docker/local/nginx/Dockerfile
         restart: always
         container_name: nginx
         depends_on:
