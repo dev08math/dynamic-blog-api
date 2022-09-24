@@ -17,3 +17,12 @@ This project aims to provide API services for Blog based apps like 'Medium'. Wit
 13. JWT based authentication of users
 14. Dockerfile for easy deployment 
 15. NGINX is being used as the Reverse Proxy
+
+# Built with
+1. Django Rest Framwork
+2. PostgreSQL
+3. Celery
+4. JWT
+5. Redis
+6. Docker
+7. NGINX
