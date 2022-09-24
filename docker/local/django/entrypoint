@@ -33,13 +33,3 @@ done
 >&2 echo "PostgreSQL ready."
 
 exec "$@"
-# echo "Hello World"
-# ls -l
-# pwd
-# ls 
-# if mountpoint -q /mounted-directory 
-# then
-#   echo "mounted"
-# else
-#   echo "not mounted"
-# fi
