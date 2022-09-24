@@ -1,5 +1,0 @@
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=dynamic_blog_db
-POSTGRES_USER=blog_admin123
-POSTGRES_PASSWORD=password
