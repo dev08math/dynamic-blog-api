@@ -7,7 +7,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 APPS_DIR = ROOT_DIR / 'core_apps'
 
-ROOT_URLCONF = 'dynamic-blog-api.urls'
+ROOT_URLCONF = 'dynamic-blog.urls'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dynamic-blog-api.wsgi.application'
+WSGI_APPLICATION = 'dynamic-blog.wsgi.application'
 
 DATABASES = {'default': env.db('DATABASE_URL')}
 DATABASES['default']['ATOMIC_REQUESTS'] = True
