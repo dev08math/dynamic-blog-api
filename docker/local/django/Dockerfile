@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     build-essential \
     libpq-dev
 
-COPY ./dynamic-blog-api/requirements .
+COPY ./dynamic-blog/requirements .
 
 RUN pip wheel --wheel-dir /usr/src/app/wheels \
     -r ${BUILD_ENVIRONMENT}.txt
@@ -40,7 +40,7 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
     && rm -rf /wheels/
 
 
-COPY ./dynamic-blog-api ${APP_HOME}
+COPY ./dynamic-blog ${APP_HOME}
 
 ADD ./docker/local/django/entrypoint ./entrypoint
 RUN sed -i 's/\r$//g' ./entrypoint
