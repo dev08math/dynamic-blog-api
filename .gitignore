@@ -3,8 +3,8 @@
 .coverage*
 .DS_Store
 staticfiles
-.envs/*
-!.envs/.local/
+.envs
+.envs/.local/
 mediafiles
 migrations
 
